@@ -20,4 +20,9 @@ class Client extends Model
     {
         return $this->BelongsTo(ClientStatus::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->BelongsTo(User::class);
+    }
 }

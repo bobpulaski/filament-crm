@@ -25,6 +25,7 @@ class ClientStatusResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('type')
                     ->required()
+                    ->unique()
                     ->minLength(3)
                     ->maxLength(20)
                     ->label('Статус клиента'),

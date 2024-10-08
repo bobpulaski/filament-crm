@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContactResource\Pages;
 use App\Filament\Resources\ContactResource\RelationManagers;
+use App\Models\Client;
 use App\Models\Contact;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -19,6 +20,7 @@ class ContactResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $pluralLabel = 'Контакты';
+
 
     public static function form(Form $form): Form
     {
@@ -37,6 +39,7 @@ class ContactResource extends Resource
                 ->label('Клиент')
                 ->searchable()
                 ->preload()
+                ->options(Client::where('user_id', auth()->id())->pluck('name', 'id'))
                 ->createOptionForm([
                     Forms\Components\TextInput::make('name')
                         ->required()
