@@ -18,15 +18,23 @@ class ContactResource extends Resource
     protected static ?string $model = Contact::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $pluralLabel = 'Контакты';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->required()->maxLength(25),
-                Forms\Components\TextInput::make('surname')->required()->maxLength(25),
+                Forms\Components\TextInput::make('surname')
+                    ->required()
+                    ->maxLength(25)
+                    ->label('Фамилия'),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(25)
+                    ->label('Имя'),
                 Forms\Components\Select::make('client_id')
                 ->relationship('client', 'name')
+                ->label('Клиент')
                 ->searchable()
                 ->preload()
                 ->createOptionForm([
@@ -46,8 +54,10 @@ class ContactResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('surname'),
+                Tables\Columns\TextColumn::make('surname')
+                    ->label('Фамилия'),
+                Tables\Columns\TextColumn::make('name')
+                ->label('Имя'),
                 Tables\Columns\TextColumn::make('client.name')
                     ->label('Клиент'),
 

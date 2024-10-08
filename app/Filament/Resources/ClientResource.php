@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ClientResource extends Resource
 {
     protected static ?string $model = Client::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $pluralLabel = 'Клиенты';
 
     public static function form(Form $form): Form
     {
@@ -26,11 +26,18 @@ class ClientResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->minLength(3)
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->label('Наименование'),
                 Forms\Components\TextInput::make('inn')
                     ->required()
                     ->minLength(10)
-                    ->maxLength(12),
+                    ->maxLength(12)
+                    ->label('ИНН'),
+                Forms\Components\Select::make('status_id')
+                    ->relationship('status', 'type')
+                    ->label('Статус'),
+                    // ->searchable()
+                    // ->preload()
             ]);
     }
 
@@ -40,16 +47,20 @@ class ClientResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('Наименование'),
                 Tables\Columns\TextColumn::make('inn')
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->label('ИНН'),
+                // Tables\Columns\TextColumn::make('status.type')
+                //     ->label('Клиент'),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -61,7 +72,7 @@ class ClientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ContactsRelationManager::class,
         ];
     }
 
