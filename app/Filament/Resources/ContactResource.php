@@ -17,9 +17,14 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ContactResource extends Resource
 {
     protected static ?string $model = Contact::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $pluralLabel = 'Контакты';
+
+    public static function getEloquentQuery (): Builder
+    {
+//        dd(auth()->id());
+        return parent::getEloquentQuery ()->where ('user_id', auth ()->id ());
+    }
 
 
     public static function form(Form $form): Form
@@ -49,6 +54,16 @@ class ContactResource extends Resource
                         ->required()
                         ->minLength(10)
                         ->maxLength(12),
+                    Forms\Components\Select::make ('status_id')
+                        ->required ()
+                        ->relationship ('status', 'type')
+                        ->label ('Статус')
+                        ->searchable ()
+                        ->preload ()
+                        ->createOptionForm ([
+                            Forms\Components\TextInput::make ('type')
+                                ->required ()
+                        ]),
                 ]),
             ]);
     }
@@ -63,6 +78,8 @@ class ContactResource extends Resource
                 ->label('Имя'),
                 Tables\Columns\TextColumn::make('client.name')
                     ->label('Клиент'),
+//                Tables\Columns\TextColumn::make ('user_id'),
+//                Tables\Columns\TextColumn::make ('user.name'),
 
             ])
             ->filters([

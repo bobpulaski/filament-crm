@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ClientResource\Pages;
 use App\Filament\Resources\ClientResource\RelationManagers;
 use App\Models\Client;
+use App\Models\ClientStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Notifications\Notification;
 
 class ClientResource extends Resource
 {
@@ -65,17 +67,26 @@ class ClientResource extends Resource
                     ->searchable ()
                     ->sortable ()
                     ->label ('ИНН'),
-                Tables\Columns\TextColumn::make ('status.type')
-                    ->label ('Клиент'),
+//                Tables\Columns\TextColumn::make ('status.type')
+//                    ->label ('Клиент'),
+                Tables\Columns\SelectColumn::make('status_id')
+                    ->options(function () {
+                        return ClientStatus::all()->pluck('type', 'id');
+                    })
+                    ->selectablePlaceholder(false)
+                    ->label ('Статус'),
+
                 Tables\Columns\TextColumn::make ('user_id'),
                 Tables\Columns\TextColumn::make ('user.name'),
             ])
             ->filters ([
                 //
             ])
-            ->actions ([
-                // Tables\Actions\EditAction::make(),
+
+            ->actions([
+                Tables\Actions\EditAction::make(),
             ])
+
             ->bulkActions ([
                 Tables\Actions\BulkActionGroup::make ([
                     Tables\Actions\DeleteBulkAction::make (),
