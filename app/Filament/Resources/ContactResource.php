@@ -18,13 +18,14 @@ class ContactResource extends Resource
 {
     protected static ?string $model = Contact::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?string $pluralLabel = 'Контакты';
+
+
 
     public static function getEloquentQuery (): Builder
     {
-//        dd(auth()->id());
         return parent::getEloquentQuery ()->where ('user_id', auth ()->id ());
     }
+
 
 
     public static function form(Form $form): Form
@@ -72,14 +73,12 @@ class ContactResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('surname')
-                    ->label('Фамилия'),
-                Tables\Columns\TextColumn::make('name')
-                ->label('Имя'),
+                Tables\Columns\TextColumn::make('surname'),
+                Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('client.name')
                     ->label('Клиент'),
-//                Tables\Columns\TextColumn::make ('user_id'),
-//                Tables\Columns\TextColumn::make ('user.name'),
+                Tables\Columns\TextColumn::make ('user_id'),
+                Tables\Columns\TextColumn::make ('user.name'),
 
             ])
             ->filters([

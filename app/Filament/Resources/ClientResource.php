@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -67,8 +68,6 @@ class ClientResource extends Resource
                     ->searchable ()
                     ->sortable ()
                     ->label ('ИНН'),
-//                Tables\Columns\TextColumn::make ('status.type')
-//                    ->label ('Клиент'),
                 Tables\Columns\SelectColumn::make('status_id')
                     ->options(function () {
                         return ClientStatus::all()->pluck('type', 'id');
@@ -84,7 +83,9 @@ class ClientResource extends Resource
             ])
 
             ->actions([
-                Tables\Actions\EditAction::make(),
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                ])->iconButton(),
             ])
 
             ->bulkActions ([
